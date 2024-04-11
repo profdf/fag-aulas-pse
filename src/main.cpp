@@ -1,51 +1,48 @@
 #include <Arduino.h>
 
 #define PIN_LED 2
-#define ACTIVE_STATE HIGH
+#define PIN_BUTTON 4
 
 uint8_t count = 1;
+bool ledState = LOW;
 
 void setup() {
 
   Serial.begin(115200);
-  
+
+  pinMode(PIN_BUTTON, INPUT);
   pinMode(PIN_LED, OUTPUT);
 
-  digitalWrite(PIN_LED, !ACTIVE_STATE);
+  digitalWrite(PIN_LED, LOW);
 
 }
 
 void loop() {
 
-  if(Serial.available() > 0){
-    
-    uint8_t buttonState = Serial.parseInt();
+  bool state = digitalRead(PIN_BUTTON);
 
-    Serial.printf("buttonState = %d\n", buttonState);
+  if(state == LOW){
 
-    if(buttonState == ACTIVE_STATE){
+    count = count + 1;
+    // count++;
 
-      count = count + 1;
+    Serial.println(count);
 
-      if(count == 5){
-        
-        count = 1;
-
-        digitalWrite(PIN_LED, ACTIVE_STATE);
-      }
-
-    }
-    else if(buttonState == 2){
-      digitalWrite(PIN_LED, ACTIVE_STATE);
-      delay(5000);
-
-      digitalWrite(PIN_LED, !ACTIVE_STATE);
-
-    }
-    else{
-      digitalWrite(PIN_LED, !ACTIVE_STATE);
-    }
-    
   }
+
+  if(count == 5){
+    
+    count = 1;
+
+    ledState = !ledState;
+    
+    digitalWrite(PIN_LED, ledState);
+
+  }
+  
+  // Serial.println(state);
+
+  delay(100);
+
 
 }
