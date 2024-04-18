@@ -1,48 +1,25 @@
 #include <Arduino.h>
 
-#define PIN_LED 2
-#define PIN_BUTTON 4
-
-uint8_t count = 1;
-bool ledState = LOW;
+#define PIN_POT 34
+#define PIN_LED 27
 
 void setup() {
 
   Serial.begin(115200);
 
-  pinMode(PIN_BUTTON, INPUT);
-  pinMode(PIN_LED, OUTPUT);
-
-  digitalWrite(PIN_LED, LOW);
-
 }
 
 void loop() {
 
-  bool state = digitalRead(PIN_BUTTON);
+  int raw = analogRead(PIN_POT);
 
-  if(state == LOW){
+  // float voltage = (3.3 / 4095) * raw;
+  // float resistence = (10000.0 / 4095) * raw;
+  // Serial.printf("Raw: %d, Voltage: %.2f\n", raw, voltage);
 
-    count = count + 1;
-    // count++;
+  int brightness = 255.0 / 4095 * raw;  
+  analogWrite(PIN_LED, brightness);
 
-    Serial.println(count);
-
-  }
-
-  if(count == 5){
-    
-    count = 1;
-
-    ledState = !ledState;
-    
-    digitalWrite(PIN_LED, ledState);
-
-  }
-  
-  // Serial.println(state);
-
-  delay(100);
-
+  delay(10);
 
 }
