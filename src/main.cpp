@@ -1,25 +1,21 @@
 #include <Arduino.h>
-
-#define PIN_POT 34
-#define PIN_LED 27
+#include "libs/SerialMonitor.h"
 
 void setup() {
 
   Serial.begin(115200);
+  print(Serial, "Hello World!");
 
 }
 
 void loop() {
 
-  int raw = analogRead(PIN_POT);
+  char readed = read(Serial);
 
-  // float voltage = (3.3 / 4095) * raw;
-  // float resistence = (10000.0 / 4095) * raw;
-  // Serial.printf("Raw: %d, Voltage: %.2f\n", raw, voltage);
+  if(readed){
+    print(Serial, readed);
+  }
 
-  int brightness = 255.0 / 4095 * raw;  
-  analogWrite(PIN_LED, brightness);
-
-  delay(10);
+  delay(100);
 
 }
