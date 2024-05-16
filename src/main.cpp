@@ -2,6 +2,8 @@
 #include <LiquidCrystal.h>
 
 // BACKLIGHT (VO) -> GND
+// ESQUEMA: https://www.circuitschools.com/wp-content/uploads/2020/09/Interfacing-16X2-LCD-module-with-ESP-32-without-using-I2C-adapter.webp
+
 const int rs = 19, en = 23, d4 = 18, d5 = 17, d6 = 16, d7 = 15;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
