@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <LiquidCrystal.h>
 
-// BACKLIGHT (VO) -> GND
+// BACKLIGHT (VO) -> GND (limiar encontrado é 600mV, ou seja, mostra caractere de 0-600mV, não mostra de 601mV a 5V)
 // ESQUEMA: https://www.circuitschools.com/wp-content/uploads/2020/09/Interfacing-16X2-LCD-module-with-ESP-32-without-using-I2C-adapter.webp
 
 const int rs = 19, en = 23, d4 = 18, d5 = 17, d6 = 16, d7 = 15;
