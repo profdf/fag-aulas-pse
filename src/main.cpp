@@ -1,27 +1,52 @@
 #include <Arduino.h>
 #include <LiquidCrystal.h>
-
-// BACKLIGHT (VO) -> GND (limiar encontrado é 600mV, ou seja, mostra caractere de 0-600mV, não mostra de 601mV a 5V)
-// ESQUEMA: https://www.circuitschools.com/wp-content/uploads/2020/09/Interfacing-16X2-LCD-module-with-ESP-32-without-using-I2C-adapter.webp
+#include "DHT.h"
 
 const int rs = 19, en = 23, d4 = 18, d5 = 17, d6 = 16, d7 = 15;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
-uint8_t count = 0;
+#define DHTPIN 2
+#define DHTTYPE DHT11   
+
+DHT dht(DHTPIN, DHTTYPE);
 
 void setup() {
 
+  Serial.begin(115200);
   lcd.begin(16, 2);
   lcd.print("Iniciando...");
 
-  delay(5000);
+  delay(1000);
 
+  lcd.clear();
+
+  Serial.println(F("DHTxx test!"));
+
+  dht.begin();
 }
 
 void loop() {
+  delay(2000);
+  float h = dht.readHumidity();
+  float t = dht.readTemperature();
+  float f = dht.readTemperature(true);
 
-  lcd.clear();
-  lcd.print(count++);
-  delay(1000);
+  if (isnan(h) || isnan(t) || isnan(f)) {
+    Serial.println(F("Failed to read from DHT sensor!"));
+    return;
+  }
+
+  Serial.print(F("Humidity: "));
+  Serial.print(h);
+  Serial.print(F("%  Temperature: "));
+  Serial.print(t);
+  Serial.print(F("°C "));
+  Serial.print(f);
+  Serial.println(F("°F"));
+
+  lcd.setCursor(0, 0);
+  lcd.printf("UMIDADE: %.1f %", h);
+  lcd.setCursor(0, 1);
+  lcd.printf("TEMPERATURA:%.1fC", t);
 
 }
