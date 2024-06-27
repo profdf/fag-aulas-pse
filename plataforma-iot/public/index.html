@@ -1,0 +1,48 @@
+<!-- Complete Project Details at: https://RandomNerdTutorials.com/ -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESP Firebase App</title>
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js"></script>
+
+  <script>
+    // REPLACE WITH YOUR web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAJ6xRK6Tt_Z_hYubzDPbPLpzjQCbsHa_g",
+      authDomain: "fag-pse-teste.firebaseapp.com",
+      databaseURL: "https://fag-pse-teste-default-rtdb.firebaseio.com",
+      projectId: "fag-pse-teste",
+      storageBucket: "fag-pse-teste.appspot.com",
+      messagingSenderId: "673188552884",
+      appId: "1:673188552884:web:57bc96be4c1470c91a37e1"
+    }
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    var database = firebase.database();
+  </script>
+  <script src="app.js" defer></script>
+
+</head>
+
+<body>
+  <h1>Controle Inteligente de Temperatura</h1>
+  <p>Temperatura: <span id="temperature"></span> °C</p>
+  <p>Umidade: <span id="humidity"></span>%</p>
+  <p>Limiar atual: <span id="thresholdValue"></span> °C</p>
+  <div>
+    <label for="threshold">Limiar de temperatura: </label>
+    <input type="text" id="threshold">
+    <button id="setTemperature">Confirmar</button>
+  </div>
+</body>
+
+</html>
