@@ -9,8 +9,8 @@
 #include "addons/RTDBHelper.h"
 
 // Insert your network credentials
-#define WIFI_SSID "NOME_REDE"
-#define WIFI_PASSWORD "SENHA"
+#define WIFI_SSID "YOUR_SSID"
+#define WIFI_PASSWORD "YOUR_PASSWORD"
 
 // Insert Firebase project API Key
 #define API_KEY "AIzaSyAJ6xRK6Tt_Z_hYubzDPbPLpzjQCbsHa_g"
@@ -27,8 +27,8 @@ FirebaseConfig config;
 unsigned long sendDataPrevMillis = 0;
 bool signupOK = false;
 
-#define DHTPIN 4     // Digital pin connected to the DHT sensor
-#define DHTTYPE    DHT11     // DHT 11
+#define DHTPIN 4
+#define DHTTYPE    DHT11
 DHT dht(DHTPIN, DHTTYPE);
 
 float readDHTTemperature() {
@@ -61,6 +61,8 @@ float readDHTHumidity() {
 void setup(){
 
   Serial.begin(115200);
+  pinMode(2, OUTPUT);
+  digitalWrite(2, LOW);
 
   dht.begin();
 
@@ -102,7 +104,7 @@ void loop(){
   if (Firebase.ready() && signupOK && (millis() - sendDataPrevMillis > 15000 || sendDataPrevMillis == 0)){
     sendDataPrevMillis = millis();
 
-    if (Firebase.RTDB.setFloat(&fbdo, "leituras/temperatura", readDHTTemperature())){
+    if (Firebase.RTDB.setFloat(&fbdo, "readings/temperature", readDHTTemperature())){
       Serial.println("PASSED");
       Serial.println("PATH: " + fbdo.dataPath());
       Serial.println("TYPE: " + fbdo.dataType());
@@ -112,7 +114,7 @@ void loop(){
       Serial.println("REASON: " + fbdo.errorReason());
     }
     
-    if (Firebase.RTDB.setFloat(&fbdo, "leituras/umidade", readDHTHumidity())){
+    if (Firebase.RTDB.setFloat(&fbdo, "readings/humidity", readDHTHumidity())){
       Serial.println("PASSED");
       Serial.println("PATH: " + fbdo.dataPath());
       Serial.println("TYPE: " + fbdo.dataType());
@@ -121,6 +123,22 @@ void loop(){
       Serial.println("FAILED");
       Serial.println("REASON: " + fbdo.errorReason());
     }
+
+    float threshold = 0.0f;
+    if(Firebase.RTDB.getFloat(&fbdo, "readings/threshold", &threshold)){
+      Serial.printf("Threshold: %.2f", threshold);
+    }
+    else{
+      Serial.println("-");
+    }
+
+    if(readDHTTemperature() >= threshold){
+      digitalWrite(2, HIGH);
+    }
+    else{
+      digitalWrite(2, LOW);
+    }
+
   }
 
 }
